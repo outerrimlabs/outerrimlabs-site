@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Outer Rim Labs — Small ships. Real problems.</title>
+<meta name="description" content="Outer Rim Labs is a one-person app studio building small, focused, privacy-first apps: a net-worth tracker, an expense tracker, and a food-quality app. Built on the frontier, in Ireland.">
+<meta property="og:title" content="Outer Rim Labs">
+<meta property="og:description" content="Small ships. Real problems. Privacy-first apps from a one-person studio.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://outerrimlabs.app">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230D0D0D'/%3E%3Ccircle cx='24' cy='44' r='18' fill='%23C1272D'/%3E%3Ccircle cx='48' cy='20' r='7' fill='%23E8702A'/%3E%3Crect y='44' width='64' height='20' fill='%230D0D0D'/%3E%3Crect y='43' width='64' height='2.5' fill='%23F7F6F4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#0D0D0D; --red:#C1272D; --orange:#E8702A; --white:#FFFFFF; --off:#F7F6F4; --grey:#4A4A4A;
+  --grey-2:#9A9A9A; --rule:#E3E0DA;
+  --font:"Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;font-family:var(--font);color:var(--black);background:var(--black);line-height:1.5;font-size:17px;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* ── nav ── */
+nav{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:26px 0}
+.wordmark{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--white);font-weight:800;letter-spacing:.06em;font-size:15px}
+.wordmark span{color:var(--red)}
+.wordmark svg{width:28px;height:28px}
+nav ul{display:flex;gap:28px;list-style:none;margin:0;padding:0}
+nav li a{color:#CFCCC6;text-decoration:none;font-weight:500;font-size:15px}
+nav li a:hover{color:var(--white)}
+@media (max-width:600px){nav ul{display:none}}
+
+/* ── hero: dusk on the outer rim ──
+   Sky: night at the top, Rebel Red through the middle, warm at the horizon.
+   Two unequal suns, apart. A dark desert ridge closes the scene; the
+   headline sits in the night sky above it. */
+.hero{position:relative;overflow:hidden;color:var(--white);min-height:min(92vh,880px);display:flex;flex-direction:column;
+  background:linear-gradient(180deg,#0D0D0D 0%,#1E0E24 18%,#5A1430 40%,#C1272D 62%,#E8702A 80%,#F0B27A 100%)}
+.hero .wrap{position:relative;z-index:2;width:100%}
+.stars{position:absolute;inset:0;z-index:0;pointer-events:none}
+.scene{position:absolute;left:0;right:0;bottom:0;z-index:1;width:100%;height:auto;display:block;pointer-events:none}
+.hero-copy{flex:1;display:flex;align-items:center;padding:6vh 0 34vh}
+h1{font-weight:800;font-size:clamp(42px,7.4vw,92px);line-height:.96;letter-spacing:-.025em;margin:0;max-width:12ch;text-shadow:0 2px 24px rgba(0,0,0,.25)}
+.lede{max-width:52ch;font-size:clamp(17px,1.5vw,20px);color:#F1E7E3;margin:26px 0 34px;text-shadow:0 1px 12px rgba(0,0,0,.25)}
+.cta{display:inline-flex;align-items:center;gap:10px;background:var(--white);color:var(--black);text-decoration:none;font-weight:800;padding:15px 22px;border-radius:6px;font-size:16px}
+.cta:hover{background:var(--off)}
+.cta-quiet{margin-left:22px;color:#F1E7E3;text-decoration:underline;text-underline-offset:4px;font-weight:500}
+.cta-quiet:hover{color:var(--white)}
+@media (max-width:600px){.hero-copy{padding-bottom:30vh}}
+
+/* ── fleet: a hangar roster, not cards ── */
+.fleet{background:var(--off);padding:80px 0 72px}
+h2{font-weight:800;font-size:clamp(30px,4vw,44px);letter-spacing:-.02em;line-height:1.05;margin:0 0 10px}
+.sub{color:var(--grey);max-width:60ch;margin:0 0 44px;font-size:18px}
+.ship{display:grid;grid-template-columns:120px 1fr 200px;gap:28px;padding:30px 0;border-top:2px solid var(--black);align-items:start}
+.ship:last-of-type{border-bottom:2px solid var(--black)}
+.callsign{display:inline-block;background:var(--red);color:var(--white);font-weight:800;padding:6px 10px;border-radius:4px;font-size:14px;letter-spacing:.02em;white-space:nowrap}
+.ship h3{margin:0 0 8px;font-size:clamp(22px,2.4vw,28px);font-weight:800;letter-spacing:-.015em;line-height:1.15}
+.ship p{margin:0 0 10px;max-width:62ch;color:#2A2A2A}
+.privacy{font-weight:800;color:var(--black)}
+.status{justify-self:end;text-align:right;font-size:15px;color:var(--grey)}
+.status b{display:block;color:var(--black);font-weight:800}
+.name-note{font-size:14px;color:var(--grey-2);margin-top:10px}
+@media (max-width:760px){
+  .ship{grid-template-columns:1fr;gap:12px}
+  .status{justify-self:start;text-align:left}
+}
+
+/* ── how we build ── */
+.how{background:var(--white);padding:80px 0}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:36px}
+.how h3{font-size:22px;font-weight:800;margin:0 0 10px;letter-spacing:-.01em}
+.how p{margin:0;color:#2A2A2A;max-width:38ch}
+@media (max-width:760px){.how-grid{grid-template-columns:1fr;gap:28px}}
+
+/* ── hangar log ── */
+.log{background:var(--off);padding:72px 0}
+.log ul{list-style:none;padding:0;margin:28px 0 0;max-width:70ch}
+.log li{padding:14px 0;border-top:1px solid var(--rule);display:grid;grid-template-columns:110px 1fr;gap:16px}
+.log li:last-child{border-bottom:1px solid var(--rule)}
+.log time{color:var(--grey);font-weight:500;font-size:15px}
+@media (max-width:600px){.log li{grid-template-columns:1fr;gap:4px}}
+
+/* ── footer ── */
+footer{background:var(--black);color:#CFCCC6;padding:64px 0 40px}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px}
+footer h4{color:var(--white);margin:0 0 10px;font-size:15px;font-weight:800}
+footer p{margin:0 0 8px;font-size:15px}
+footer a{color:#CFCCC6;text-decoration:underline;text-underline-offset:3px}
+footer a:hover{color:var(--white)}
+.legal{margin-top:40px;padding-top:22px;border-top:1px solid #2A2A2A;font-size:13px;color:var(--grey-2);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media (max-width:760px){.foot-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <nav aria-label="Main">
+      <a class="wordmark" href="/" aria-label="Outer Rim Labs home">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="24" cy="44" r="18" fill="#C1272D"/><circle cx="48" cy="20" r="7" fill="#E8702A"/><rect y="44" width="64" height="20" fill="#0D0D0D"/><rect y="43" width="64" height="2.5" fill="#F7F6F4"/></svg>
+        OUTER RIM <span>LABS</span>
+      </a>
+      <ul>
+        <li><a href="#fleet">The fleet</a></li>
+        <li><a href="#how">How we build</a></li>
+        <li><a href="#hangar">Hangar log</a></li>
+        <li><a href="https://github.com/outerrimlabs" target="_blank" rel="me noopener">GitHub</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- a few stars in the night part of the sky -->
+  <svg class="stars" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMin slice" aria-hidden="true">
+    <g fill="#F7F6F4">
+      <circle cx="90" cy="60" r="1.4" opacity=".9"/><circle cx="210" cy="140" r="1" opacity=".6"/><circle cx="330" cy="40" r="1.2" opacity=".8"/>
+      <circle cx="480" cy="110" r=".9" opacity=".5"/><circle cx="640" cy="70" r="1.5" opacity=".9"/><circle cx="760" cy="160" r="1" opacity=".6"/>
+      <circle cx="900" cy="50" r="1.3" opacity=".8"/><circle cx="1040" cy="120" r=".9" opacity=".5"/><circle cx="1140" cy="30" r="1.4" opacity=".9"/>
+      <circle cx="150" cy="230" r=".8" opacity=".4"/><circle cx="560" cy="210" r="1" opacity=".5"/><circle cx="990" cy="220" r=".8" opacity=".4"/>
+    </g>
+  </svg>
+
+  <div class="hero-copy">
+    <div class="wrap">
+      <h1>Small ships. Real problems.</h1>
+      <p class="lede">Outer Rim Labs is a one-person app studio in Ireland. Each app does one job well, keeps your data yours, and costs less than the coffee you drink while using it. No bank logins. No ads. No trackers.</p>
+      <a class="cta" href="#fleet">See the fleet</a>
+      <a class="cta-quiet" href="#how">How we build</a>
+    </div>
+  </div>
+
+  <!-- Two unequal suns, apart, over a desert ridge. Our own drawing: sky,
+       suns, dunes — nothing borrowed. The nav mark is this scene reduced. -->
+  <svg class="scene" viewBox="0 0 1440 520" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <defs>
+      <radialGradient id="halo1" cx="50%" cy="50%" r="50%"><stop offset=".6" stop-color="#F7E4C4" stop-opacity=".35"/><stop offset="1" stop-color="#F7E4C4" stop-opacity="0"/></radialGradient>
+      <radialGradient id="halo2" cx="50%" cy="50%" r="50%"><stop offset=".6" stop-color="#F6C46B" stop-opacity=".35"/><stop offset="1" stop-color="#F6C46B" stop-opacity="0"/></radialGradient>
+    </defs>
+    <!-- big sun, low; small sun, higher and to the right -->
+    <circle cx="880" cy="250" r="150" fill="url(#halo1)"/>
+    <circle cx="880" cy="250" r="105" fill="#F7E4C4"/>
+    <circle cx="1090" cy="150" r="80" fill="url(#halo2)"/>
+    <circle cx="1090" cy="150" r="48" fill="#F6C46B"/>
+    <!-- far ridge, mid ridge, foreground dunes -->
+    <path d="M0 400 C120 380 220 350 340 372 C460 394 540 360 660 366 C800 372 880 340 1010 356 C1140 372 1260 350 1440 380 V520 H0 Z" fill="#7A1E2C" opacity=".9"/>
+    <path d="M0 430 C90 420 170 396 300 410 C420 422 520 400 640 412 C780 426 900 400 1040 416 C1180 432 1300 410 1440 424 V520 H0 Z" fill="#4A1220"/>
+    <path d="M0 470 C160 450 280 462 420 456 C580 448 720 470 880 462 C1040 454 1200 474 1440 458 V520 H0 Z" fill="#1A0A10"/>
+    <rect y="500" width="1440" height="20" fill="#0D0D0D"/>
+  </svg>
+</header>
+
+<main>
+  <section class="fleet" id="fleet">
+    <div class="wrap">
+      <h2>The fleet</h2>
+      <p class="sub">Three ships. Callsigns for now; each gets its own proper name before it reaches the app stores.</p>
+
+      <article class="ship">
+        <div><span class="callsign">Red Three</span></div>
+        <div>
+          <h3>Your whole picture. One place.</h3>
+          <p>A net-worth tracker. Bank balances, stocks, crypto, gold, property and pension in one number, minus what you owe. Prices update themselves. Your history writes itself from day one. It understands Irish taxes: capital gains, exit tax, the eight-year clock on ETFs.</p>
+          <p class="privacy">No bank logins. Your data encrypted with a key only you hold.</p>
+          <p class="name-note">Public name coming.</p>
+        </div>
+        <div class="status"><b>Field test</b>Launching in Ireland first</div>
+      </article>
+
+      <article class="ship">
+        <div><span class="callsign">Red Two</span></div>
+        <div>
+          <h3>Drop in a statement. See your spending.</h3>
+          <p>An expense tracker fed by receipts and bank PDFs. Revolut, N26, AIB, Bank of Ireland, any bank that can export a statement. It reads the documents you already have instead of asking for the keys to your account.</p>
+          <p class="privacy">No bank connections, ever. Statements deleted after reading.</p>
+          <p class="name-note">Public name coming.</p>
+        </div>
+        <div class="status"><b>In the hangar</b>Next up</div>
+      </article>
+
+      <article class="ship">
+        <div><span class="callsign">Red One</span></div>
+        <div>
+          <h3>How good was that plate?</h3>
+          <p>Food quality from a photo of your meal, not calories. A plate score through the nutrition lens you choose, colour and plant variety, and weekly notes on what your week was missing.</p>
+          <p class="privacy">Photos scored, then deleted. Your meals never leave with us.</p>
+          <p class="name-note">Public name coming.</p>
+        </div>
+        <div class="status"><b>In the hangar</b>Prototype built</div>
+      </article>
+    </div>
+  </section>
+
+  <section class="how" id="how">
+    <div class="wrap">
+      <h2>How we build</h2>
+      <p class="sub">A one-person studio can't outspend anyone. It can outcare them.</p>
+      <div class="how-grid">
+        <div>
+          <h3>One job, done well</h3>
+          <p>Every ship has one mission. No feature lists that need a tour. If a thing doesn't serve the job, it doesn't ship.</p>
+        </div>
+        <div>
+          <h3>Your data is yours</h3>
+          <p>Servers in the EU. Nothing sold, nothing tracked. Export everything in one tap, delete everything in one tap, and we mean delete.</p>
+        </div>
+        <div>
+          <h3>Honest pricing</h3>
+          <p>A fair yearly price, said up front. No fake countdowns, no dark patterns, no "limited time". If it isn't worth it, don't pay.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="log" id="hangar">
+    <div class="wrap">
+      <h2>Hangar log</h2>
+      <p class="sub">Building in public, plainly. The numbers, the fixes, and what got scrapped.</p>
+      <ul>
+        <li><time datetime="2026-09">Sep 2026</time><span>Red Three's maiden flight is in daily field test. End-to-end encryption is being built in before anyone else gets a login.</span></li>
+        <li><time datetime="2026-09">Sep 2026</time><span>Two-factor sign-in shipped. The founder's own bank statement became the test case for the mortgage maths.</span></li>
+        <li><time datetime="2026-08">Aug 2026</time><span>Five ideas validated, two scrapped. A calorie-counting app was killed before a line of code: that market closed in 2025.</span></li>
+        <li><time datetime="2026-08">Aug 2026</time><span>Outer Rim Labs founded. First ship scaffolded from a spreadsheet that had been doing the job for years.</span></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h4>Outer Rim Labs</h4>
+        <p>Built on the frontier. A one-person app studio, Ireland.</p>
+        <p>Tiny apps from the edge of the galaxy.</p>
+      </div>
+      <div>
+        <h4>Follow the build</h4>
+        <p><a href="https://github.com/outerrimlabs" target="_blank" rel="me noopener">GitHub</a></p>
+        <p><a href="mailto:hello@outerrimlabs.app">hello@outerrimlabs.app</a></p>
+      </div>
+      <div>
+        <h4>The fleet</h4>
+        <p><a href="#fleet">Red Three</a></p>
+        <p><a href="#fleet">Red Two</a></p>
+        <p><a href="#fleet">Red One</a></p>
+      </div>
+    </div>
+    <div class="legal">
+      <span>© 2026 Outer Rim Labs. Nothing here is financial, tax or medical advice.</span>
+      <span>Not affiliated with Lucasfilm or Disney.</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
