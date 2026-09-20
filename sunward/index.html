@@ -36,8 +36,7 @@ h1{font-weight:800;font-size:clamp(38px,6vw,64px);line-height:1;letter-spacing:-
 .badges{display:flex;gap:12px;flex-wrap:wrap}
 .badge{display:inline-flex;align-items:center;gap:10px;background:var(--white);color:var(--black);text-decoration:none;font-weight:800;padding:12px 18px;border-radius:8px;font-size:15px}
 .badge.soon{background:rgba(255,255,255,.14);color:var(--white);font-weight:500}
-.suns{position:absolute;right:6%;bottom:52px;z-index:1;pointer-events:none}
-@media (max-width:640px){.hero{grid-template-columns:1fr}.suns{display:none}}
+@media (max-width:640px){.hero{grid-template-columns:1fr}}
 
 main{padding:8px 0 40px}
 section{padding:36px 0;border-bottom:1px solid var(--rule)}
@@ -75,11 +74,6 @@ footer .legal{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap
       </div>
     </div>
   </div>
-  <svg class="suns" width="220" height="150" viewBox="0 0 220 150" aria-hidden="true">
-    <circle cx="180" cy="34" r="16" fill="#F6C46B"/>
-    <path d="M40 140 A56 56 0 0 1 152 140 Z" fill="#F7E4C4"/>
-    <rect x="0" y="138" width="220" height="5" fill="#F7E4C4" opacity=".9"/>
-  </svg>
 </header>
 
 <main class="wrap">
