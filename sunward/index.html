@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sunward — Net Worth Tracker for Ireland · Outer Rim Labs</title>
+<meta name="description" content="Sunward puts everything you own and owe in one number: bank balances, shares, crypto, gold, your home, your pension, your mortgage. Irish taxes built in. Encrypted on your phone. By Outer Rim Labs, Ireland.">
+<link rel="icon" href="/sunward/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/sunward/icon-180.png">
+<meta property="og:title" content="Sunward — Net Worth Tracker for Ireland">
+<meta property="og:description" content="Your net worth today, at 65, and after Irish taxes. Encrypted on your phone.">
+<meta property="og:image" content="https://outerrimlabs.app/sunward/og.png">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;800&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0D0D0D;--night:#1E0E24;--wine:#5A1430;--land:#1A0A10;--red:#C1272D;--orange:#E8702A;--amber:#F6C46B;--cream:#F7E4C4;--white:#FFFFFF;--off:#F7F6F4;--grey:#4A4A4A;--grey-2:#9A9A9A;--rule:#E3E0DA;
+  --font:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--font);color:var(--black);background:var(--off);line-height:1.5;font-size:17px;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:880px;margin:0 auto;padding:0 24px}
+
+/* sky header — the same gradient the app opens with */
+header.sky{color:var(--white);background:linear-gradient(180deg,var(--night) 0%,var(--wine) 30%,var(--red) 58%,var(--orange) 80%,#F0B27A 95%,var(--off) 100%);position:relative;overflow:hidden}
+nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0;position:relative;z-index:2}
+.studio{display:flex;align-items:center;gap:10px;color:var(--white);text-decoration:none;font-weight:800;letter-spacing:.06em;font-size:14px}
+.studio span{color:var(--amber)}
+nav a.back{color:#F1E7E3;text-decoration:none;font-size:15px}
+.hero{position:relative;z-index:2;padding:36px 0 120px;display:grid;grid-template-columns:96px 1fr;gap:28px;align-items:start}
+.hero img{width:96px;height:96px;border-radius:22px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+h1{font-weight:800;font-size:clamp(38px,6vw,64px);line-height:1;letter-spacing:-.02em;margin:0 0 10px}
+.tag{font-size:clamp(18px,2.2vw,22px);color:var(--cream);margin:0 0 22px;max-width:44ch}
+.badges{display:flex;gap:12px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:10px;background:var(--white);color:var(--black);text-decoration:none;font-weight:800;padding:12px 18px;border-radius:8px;font-size:15px}
+.badge.soon{background:rgba(255,255,255,.14);color:var(--white);font-weight:500}
+.suns{position:absolute;right:6%;bottom:52px;z-index:1;pointer-events:none}
+@media (max-width:640px){.hero{grid-template-columns:1fr}.suns{display:none}}
+
+main{padding:8px 0 40px}
+section{padding:36px 0;border-bottom:1px solid var(--rule)}
+section:last-of-type{border-bottom:0}
+h2{font-weight:800;font-size:28px;letter-spacing:-.01em;margin:0 0 14px}
+h3{font-weight:800;font-size:19px;margin:26px 0 8px}
+p{margin:0 0 14px;max-width:70ch}
+.muted{color:var(--grey)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+@media (max-width:640px){.cols{grid-template-columns:1fr}}
+.pill{display:inline-block;background:#FBF1D6;border:1px solid var(--amber);border-radius:999px;padding:2px 10px;font-size:13px;font-weight:600;color:var(--night)}
+
+footer{background:var(--land);color:#CFCCC6;padding:36px 0 30px;font-size:14px}
+footer a{color:var(--white)}
+footer .legal{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--grey-2);margin-top:18px}
+</style>
+</head>
+<body>
+
+<header class="sky">
+  <div class="wrap">
+    <nav>
+      <a class="studio" href="/">OUTER RIM <span>LABS</span></a>
+      <a class="back" href="/#fleet">← The fleet</a>
+    </nav>
+    <div class="hero">
+      <img src="/sunward/icon-180.png" alt="Sunward icon: two suns on a horizon" width="96" height="96">
+      <div>
+        <h1>Sunward</h1>
+        <p class="tag">Your net worth today, at 65, and after Irish taxes. Encrypted on your phone.</p>
+        <div class="badges">
+          <span class="badge soon">Google Play — closed beta, Ireland</span>
+          <span class="badge soon">iPhone — after the beta</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <svg class="suns" width="220" height="150" viewBox="0 0 220 150" aria-hidden="true">
+    <circle cx="180" cy="34" r="16" fill="#F6C46B"/>
+    <path d="M40 140 A56 56 0 0 1 152 140 Z" fill="#F7E4C4"/>
+    <rect x="0" y="138" width="220" height="5" fill="#F7E4C4" opacity=".9"/>
+  </svg>
+</header>
+
+<main class="wrap">
+
+  <section id="what">
+    <h2>One number, from everything you own and owe.</h2>
+    <p>Bank accounts, shares and ETFs, crypto, gold and silver, your home, your car, your pension, and what you still owe on each of them. You type in what you have; Sunward prices what can be priced every day, and walks debts and pensions forward between your updates.</p>
+    <div class="cols">
+      <div>
+        <h3>It knows Irish taxes</h3>
+        <p>Capital gains tax on a sale, with the payment and return dates. The 38% exit tax and the eight-year deemed-disposal clock on ETFs. DIRT on savings interest. Pension relief and the State Pension. Auto-enrolment. All from Revenue's own rules, described, never advised.</p>
+      </div>
+      <div>
+        <h3>It looks forward</h3>
+        <p>Three honest guesses at your net worth at 65. What a lump sum would save on the mortgage. How your mix compares with Irish households, from CSO and Central Bank figures.</p>
+      </div>
+      <div>
+        <h3>No bank logins. Ever.</h3>
+        <p>Sunward never connects to your bank or broker. You enter totals in a minute a week. The most dangerous data is data that never exists.</p>
+      </div>
+      <div>
+        <h3>Encrypted on your phone</h3>
+        <p>Your numbers are locked with a passphrase only you know. The server stores one scrambled file it cannot open. Export everything anytime; delete everything in one tap.</p>
+      </div>
+    </div>
+    <p class="muted">Sunward is a net-worth tracker, not a financial adviser. It describes and compares; the decisions stay yours.</p>
+  </section>
+
+  <section id="privacy">
+    <h2>Privacy policy</h2>
+    <p class="muted">Last updated 20 September 2026. This is the whole policy; there is no longer version.</p>
+
+    <h3>Who we are</h3>
+    <p>Sunward is made by Outer Rim Labs, a one-person app studio in Ireland. Contact: <a href="mailto:hello@outerrimlabs.app">hello@outerrimlabs.app</a>. Outer Rim Labs is the data controller for the little personal data the app holds.</p>
+
+    <h3>What the app stores, and how</h3>
+    <p>The financial facts you type (balances, quantities, purchase dates and costs, debt terms, pension values, which tickers you follow) and one history point per day. All of it is encrypted on your phone, into a single file, with a key derived from a vault passphrase that never leaves your device. That encrypted file is stored on servers in the EU (Ireland, Supabase). We cannot decrypt it. Neither could an attacker with full access to the database, nor a court order: the result is one scrambled file per person, with no readable amounts or asset types.</p>
+    <p>Unencrypted, the server holds only what it needs to run an account: your email address, a hashed login password, whether two-factor authentication is on, and the encrypted vault file. Market prices are public data shared by everyone and are not personal data.</p>
+
+    <h3>What the app deliberately does not store</h3>
+    <p>Bank logins, card numbers, IBANs, transactions, your name, your address, your phone number. The app never connects to a bank or broker. Your birth year, if you enter it for retirement maths, stays on the phone only and is never uploaded.</p>
+
+    <h3>What leaves your phone, and to whom</h3>
+    <p>Your email address and the encrypted vault file go to Supabase (EU region) to sign you in and to sync. Sign-in and password-reset emails are sent through Resend (EU region); they contain no images or tracking. Ticker symbols you look up are sent to our price service so it can fetch public prices; no quantities or values travel with them. If the app crashes, a crash report (device model, OS version, the error; we attach no personal data and Sentry's data scrubbing is on) goes to Sentry (EU region) so we can fix it. That is the complete list. There are no analytics, no advertising SDKs, no trackers.</p>
+
+    <h3>Your rights and your control</h3>
+    <p>Export everything at any time from Profile, as a plain or encrypted file you can read without Sunward. Delete all your data from Profile in one tap; deletion is immediate and permanent. Delete your account the same way, which removes the email address too. Because we cannot read your vault, we cannot recover it for you: if you forget the passphrase and lose the twelve-word recovery phrase, the data is gone, by design. Under GDPR you also have the rights of access, rectification, erasure, portability, restriction and objection; for anything the app's own buttons do not cover, email us and we will answer within 30 days. You can complain to the Irish Data Protection Commission at dataprotection.ie.</p>
+
+    <h3>Retention</h3>
+    <p>Your encrypted file and email address are kept until you delete them. Crash reports are kept for 90 days. Server access logs are kept for as long as our hosting provider retains them (currently 7 days).</p>
+
+    <h3>Children</h3>
+    <p>Sunward is not directed at children under 16 and we do not knowingly collect data from them.</p>
+
+    <h3>Changes</h3>
+    <p>If this policy changes, the date above changes and the app's FAQ says so. We will not change what the app does with your data without telling you first.</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>An Outer Rim Labs app. Built on the frontier, in Ireland. <a href="/">outerrimlabs.app</a> · <a href="mailto:hello@outerrimlabs.app">hello@outerrimlabs.app</a></p>
+    <div class="legal">
+      <span>© 2026 Outer Rim Labs. Nothing here is financial or tax advice.</span>
+      <span>Not affiliated with Lucasfilm or Disney.</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
