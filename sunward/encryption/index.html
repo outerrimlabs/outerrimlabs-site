@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How Sunward's encryption works — and what happens when you change phone · Outer Rim Labs</title>
+<meta name="description" content="Sunward encrypts your numbers on your phone with a passphrase only you know. What the server holds, what leaves your phone, and what happens when you switch phones, forget the passphrase, lose the phone, or delete everything.">
+<link rel="icon" href="/sunward/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/sunward/icon-180.png">
+<meta property="og:title" content="How Sunward's encryption works">
+<meta property="og:description" content="A key only you hold, a file we cannot read — and every scenario, from a new phone to a forgotten passphrase.">
+<meta property="og:image" content="https://outerrimlabs.app/sunward/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;800&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0D0D0D;--night:#1E0E24;--wine:#5A1430;--land:#1A0A10;--red:#C1272D;--orange:#E8702A;--amber:#F6C46B;--cream:#F7E4C4;--white:#FFFFFF;--off:#F7F6F4;--grey:#4A4A4A;--grey-2:#9A9A9A;--rule:#E3E0DA;
+  --font:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--font);color:var(--black);background:var(--off);line-height:1.55;font-size:17px;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:820px;margin:0 auto;padding:0 24px}
+header.sky{color:var(--white);background:linear-gradient(180deg,var(--night) 0%,var(--wine) 30%,var(--red) 58%,var(--orange) 80%,#F0B27A 95%,var(--off) 100%)}
+nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+.studio{color:var(--white);text-decoration:none;font-weight:800;letter-spacing:.06em;font-size:14px}
+.studio span{color:var(--amber)}
+nav a.back{color:#F1E7E3;text-decoration:none;font-size:15px}
+.hero{padding:28px 0 110px}
+.hero .app{display:flex;align-items:center;gap:12px;color:var(--cream);font-weight:700;font-size:15px;margin-bottom:14px;text-decoration:none}
+.hero .app img{width:32px;height:32px;border-radius:8px}
+h1{font-weight:800;font-size:clamp(32px,5vw,50px);line-height:1.05;letter-spacing:-.02em;margin:0 0 14px;max-width:18ch}
+.tag{font-size:clamp(17px,2vw,20px);color:var(--cream);margin:0;max-width:52ch}
+main{padding:8px 0 40px}
+section{padding:34px 0;border-bottom:1px solid var(--rule)}
+section:last-of-type{border-bottom:0}
+h2{font-weight:800;font-size:27px;letter-spacing:-.01em;margin:0 0 12px}
+h3{font-weight:800;font-size:18px;margin:26px 0 6px}
+p{margin:0 0 14px;max-width:70ch}
+.muted{color:var(--grey)}
+.diagram{background:var(--white);border:1px solid var(--rule);border-radius:14px;padding:18px 20px;margin:18px 0;font-size:15px;line-height:1.7;max-width:70ch}
+.diagram b{color:var(--red)}
+.scenario{background:var(--white);border:1px solid var(--rule);border-radius:14px;padding:18px 20px;margin:14px 0;max-width:70ch}
+.scenario h3{margin:0 0 6px;font-size:17px}
+.scenario p:last-child{margin-bottom:0}
+.verdict{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;margin-bottom:8px}
+.ok{background:#EAF6EE;color:#1B6E3A;border:1px solid #BFE3CB}
+.warn{background:#FBF1D6;color:#6B4A00;border:1px solid var(--amber)}
+.gone{background:#FBE3E4;color:#8A1C22;border:1px solid #F0B3B7}
+dl{margin:0;max-width:70ch}
+dt{font-weight:700;margin-top:14px}
+dd{margin:2px 0 0}
+footer{background:var(--land);color:#CFCCC6;padding:36px 0 30px;font-size:14px}
+footer a{color:var(--white)}
+footer .legal{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--grey-2);margin-top:18px}
+</style>
+</head>
+<body>
+
+<header class="sky">
+  <div class="wrap">
+    <nav>
+      <a class="studio" href="/">OUTER RIM <span>LABS</span></a>
+      <a class="back" href="/sunward/">← Sunward</a>
+    </nav>
+    <div class="hero">
+      <a class="app" href="/sunward/"><img src="/sunward/icon-180.png" alt="" width="32" height="32">Sunward</a>
+      <h1>A key only you hold. A file we cannot read.</h1>
+      <p class="tag">How the encryption works, in plain words, and what happens in every situation you might find yourself in: a new phone, a lost phone, a forgotten passphrase.</p>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="idea">
+    <h2>The idea in one paragraph</h2>
+    <p>Most finance apps keep your numbers on their servers in a form their staff, their hosting provider, or an attacker could read. Sunward does not. Your numbers are encrypted on your phone with a key that is made from a passphrase you choose, and only the encrypted result is stored. The server holds one scrambled file per person. We cannot open it. Nobody who breaks into the server can open it. A court order would get them the same scrambled file. This is what "end-to-end encrypted" means here: the ends are your phone and your phone; the middle is blind.</p>
+    <p class="muted">The trade: because we cannot read your vault, we cannot recover it for you. The recovery phrase exists for exactly that reason. Read the scenarios below before you decide how to keep it.</p>
+  </section>
+
+  <section id="how">
+    <h2>How it works</h2>
+    <div class="diagram">
+      <b>1.</b> When you set up your vault, your phone generates a random 256-bit <b>vault key</b>. This key encrypts and decrypts everything. It is created on the phone and never leaves it unencrypted.<br>
+      <b>2.</b> You choose a <b>passphrase</b>. The phone turns it into a wrapping key using scrypt, a deliberately slow function (about a second of work) so that guessing passphrases is expensive. The vault key is locked inside that wrapping key.<br>
+      <b>3.</b> The phone also generates a <b>12-word recovery phrase</b> (a standard BIP-39 phrase, the same kind used for crypto wallets). The vault key is locked a second time inside a key made from those words.<br>
+      <b>4.</b> The two locked copies of the vault key, plus the encrypted vault, go to the server. The passphrase and the twelve words do not; they exist only in your head and wherever you wrote them.<br>
+      <b>5.</b> On your phone, the unlocked vault key is kept in the phone's hardware keystore, behind your screen lock and, if you turn it on, the fingerprint lock. That is why you do not type the passphrase every day.
+    </div>
+    <p>Everything you enter (places, holdings, balances, quantities, purchase dates and costs, debts, pensions) and every daily history point is inside the encrypted vault. The cipher is XChaCha20-Poly1305, which is authenticated: if a single byte of the file is altered, decryption fails rather than producing wrong numbers.</p>
+    <p>Your daily history is written by your phone, not the server. When you open the app it looks at the days since your last point and computes each one from your holdings and that day's market close. This is exact, because holdings cannot change while the app is closed, and it means the server never needs to see your numbers to keep your chart complete.</p>
+  </section>
+
+  <section id="leaves">
+    <h2>What leaves your phone, and what does not</h2>
+    <dl>
+      <dt>Goes to the server, encrypted, unreadable by us</dt>
+      <dd>The vault: everything you own and owe, and your history.</dd>
+      <dt>Goes to the server, readable, because an account needs it</dt>
+      <dd>Your email address, a hashed login password, whether two-factor authentication is on, and the two locked copies of your vault key. None of these reveal a single number.</dd>
+      <dt>Goes to our price service, readable, because it is public data</dt>
+      <dd>The ticker symbols you look up (say, VWCE or BTC), so it can fetch prices. Not how many you hold, not what you paid. A symbol alone says nothing about your finances.</dd>
+      <dt>Stays on your phone only</dt>
+      <dd>Your birth year and the retirement figures you type, the projection settings, which categories you hide, and whether the fingerprint lock is on. <em>We are moving these into the encrypted vault so they follow you to a new phone; until then, they are simply re-typed there.</em></dd>
+      <dt>Never exists anywhere</dt>
+      <dd>Bank logins, card numbers, IBANs, transactions. The app never connects to a bank or broker.</dd>
+    </dl>
+  </section>
+
+  <section id="scenarios">
+    <h2>What happens when…</h2>
+
+    <div class="scenario">
+      <span class="verdict ok">Everything comes back</span>
+      <h3>You get a new phone</h3>
+      <p>Install Sunward, sign in with your email and password (and your authenticator code if you use two-factor). The app then asks for your vault passphrase, or your twelve words, once. It downloads the encrypted vault, unlocks it on the new phone with the key it just recovered, and fills in any history days that were missed while the app was not open. Every place, holding, debt and pension is there. The unlocked key is then stored in the new phone's keystore, so you are not asked again. Only the on-phone settings listed above need re-typing.</p>
+    </div>
+
+    <div class="scenario">
+      <span class="verdict ok">Everything comes back</span>
+      <h3>You use two phones, or a phone and a tablet</h3>
+      <p>Same as above: sign in and enter the passphrase once on each device. Both hold the unlocked key and both read the same encrypted vault. Changes made on one appear on the other the next time it opens.</p>
+    </div>
+
+    <div class="scenario">
+      <span class="verdict ok">Nothing lost</span>
+      <h3>You lose your phone, or it is stolen</h3>
+      <p>Whoever has the phone faces your screen lock and, if enabled, the fingerprint lock; the vault key sits behind both in hardware. Your vault is still on the server, encrypted, and the vault file is never stored on a phone: the app fetches it each time with a live login session. So on a new phone, sign in, enter the passphrase, then go to Profile → <strong>Sign out on all devices</strong>. That revokes every session, including the lost phone's; even if someone gets past its locks, the app there can no longer fetch anything to decrypt. Change your login password as well. There is nothing on the old phone that helps an attacker read the server's copy.</p>
+    </div>
+
+    <div class="scenario">
+      <span class="verdict ok">Nothing lost</span>
+      <h3>You forget your login password</h3>
+      <p>Tap "Forgot password" on the sign-in screen; a reset link arrives by email and opens the app. This is the ordinary account password, which the server knows in hashed form, so resetting it is routine. It is a different thing from the vault passphrase, and resetting it has no effect on your vault.</p>
+    </div>
+
+    <div class="scenario">
+      <span class="verdict warn">Use the twelve words</span>
+      <h3>You forget your vault passphrase</h3>
+      <p>On a phone that still holds the unlocked key, nothing changes day to day; go to Profile and set a new passphrase while you can. On a new phone, enter your twelve-word recovery phrase instead of the passphrase; it unlocks the vault the same way, and you then choose a new passphrase. The words are the backup for the passphrase, which is why the app asks you to write them down at setup and lets you check them in Profile at any time.</p>
+    </div>
+
+    <div class="scenario">
+      <span class="verdict gone">Data is gone, by design</span>
+      <h3>You forget the passphrase AND lose the twelve words</h3>
+      <p>Then the vault cannot be opened by anyone, including us. There is no reset button, because a reset button would be a back door, and a back door for you is a back door for everyone else. You can delete the unreadable vault from Profile and start again; your account and login stay. This is the one real cost of the design. Keep the words somewhere that survives a lost phone: a password manager, or paper in a drawer.</p>
+    </div>
+
+    <div class="scenario">
+      <span class="verdict ok">Nothing lost</span>
+      <h3>You uninstall the app</h3>
+      <p>Everything the app kept on the phone goes with it: the session, the cached key, the on-phone settings. Nothing is left behind, and the app does not let Android back its private data up to Google Drive. The server is unchanged; your vault waits there, encrypted, until you reinstall or delete it. Reinstalling is exactly the new-phone scenario.</p>
+    </div>
+
+    <div class="scenario">
+      <span class="verdict ok">You choose</span>
+      <h3>You want your data out, or gone</h3>
+      <p>Profile → Export gives you everything as one file, in plain form or encrypted with a password you choose using standard AES-256; the encrypted file carries instructions to open it with OpenSSL on any computer, decades from now, with no Sunward involved. Profile → Delete all data wipes the vault and history and leaves an empty account. Profile → Delete my account removes the vault, the history and your email address. Both are immediate and permanent. Without the app, the same is available by email; see the <a href="/sunward/#delete">deletion section</a> of the privacy policy.</p>
+    </div>
+
+    <div class="scenario">
+      <span class="verdict ok">Your numbers stay unreadable</span>
+      <h3>Our server is breached, or we are ordered to hand data over</h3>
+      <p>The attacker, or the authority, receives what the server holds: email addresses, hashed passwords, and one encrypted file plus two locked key copies per person. The locked keys need your passphrase or your twelve words to open, and neither is on the server. We would tell you about a breach, and you would change your login password; your vault would not need to change, because nothing that opens it was exposed.</p>
+    </div>
+  </section>
+
+  <section id="honest">
+    <h2>What this does not protect against</h2>
+    <p>Encryption protects the copy on the server. It does not protect an unlocked phone in someone else's hands, which is what the screen lock and fingerprint lock are for. It does not protect a passphrase written on a sticky note on the fridge. It does not protect against a compromised phone with malware reading the screen, which no app can. And it does not make the maths in the app more right: the projections and tax estimates are estimates, encrypted or not.</p>
+    <p class="muted">Details for the technically curious: vault key 256-bit random; cipher XChaCha20-Poly1305; passphrase and recovery-phrase keys derived with scrypt (N=2<sup>15</sup>, r=8, p=1) over a random salt, with the KDF identifier stored alongside each wrapped key so the function can be upgraded without breaking old vaults; recovery phrase BIP-39, 12 English words. Libraries: audited <code>@noble</code> ciphers and hashes, <code>@scure/bip39</code>. The design note is in the app's repository.</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><a href="/sunward/">Sunward</a> is an Outer Rim Labs app. Built on the frontier, in Ireland. <a href="mailto:hello@outerrimlabs.app">hello@outerrimlabs.app</a></p>
+    <div class="legal">
+      <span>© 2026 Outer Rim Labs. Nothing here is financial or tax advice.</span>
+      <span>Not affiliated with Lucasfilm or Disney.</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
