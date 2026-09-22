@@ -53,6 +53,52 @@ dd{margin:2px 0 0}
 footer{background:var(--land);color:#CFCCC6;padding:36px 0 30px;font-size:14px}
 footer a{color:var(--white)}
 footer .legal{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--grey-2);margin-top:18px}
+
+/* ── Diagram: phone → server ── */
+.fig{background:var(--white);border:1px solid var(--rule);border-radius:16px;padding:22px 20px 16px;margin:20px 0}
+.fig svg{width:100%;height:auto;display:block}
+.fig figcaption{font-size:14px;color:var(--grey);margin-top:12px;line-height:1.5}
+.steps{list-style:none;padding:0;margin:20px 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px 22px;max-width:none}
+.steps li{font-size:15px;line-height:1.5;padding-top:10px;border-top:3px solid var(--rule)}
+.steps li:nth-child(1){border-color:var(--amber)}
+.steps li:nth-child(2){border-color:var(--orange)}
+.steps li:nth-child(3){border-color:var(--red)}
+.steps li:nth-child(4){border-color:var(--wine)}
+.steps li:nth-child(5){border-color:var(--night)}
+.steps li b{display:block;margin-bottom:2px}
+/* ── Lanes: what goes where ── */
+.lanes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0 6px}
+.lane{background:var(--white);border:1px solid var(--rule);border-radius:16px;padding:16px 16px 14px;position:relative;overflow:hidden}
+.lane::before{content:"";position:absolute;left:0;top:0;right:0;height:6px}
+.lane.stay::before{background:var(--night)}
+.lane.sealed::before{background:var(--red)}
+.lane.open::before{background:var(--amber)}
+.lane h3{margin:6px 0 2px;font-size:17px}
+.lane .who{font-size:13px;color:var(--grey);margin:0 0 12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:13px;line-height:1;padding:7px 10px;border-radius:999px;background:var(--off);border:1px solid var(--rule)}
+.lane.sealed .chip{background:#FBE3E4;border-color:#F0B3B7}
+.lane.stay .chip{background:#EDE6EF;border-color:#CDBDD3}
+.lane.open .chip{background:#FBF1D6;border-color:var(--amber)}
+.lane .never{margin:12px 0 0;font-size:13px;color:var(--grey)}
+.lane .never s{color:var(--grey-2)}
+/* ── Scenarios as a grid of verdicts ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:18px 0 0}
+details.sc{background:var(--white);border:1px solid var(--rule);border-radius:14px;padding:0;max-width:none}
+details.sc summary{list-style:none;cursor:pointer;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+details.sc summary::-webkit-details-marker{display:none}
+details.sc summary h3{margin:0;font-size:17px;line-height:1.3}
+details.sc summary .one{font-size:14px;color:var(--grey);margin:0;line-height:1.45}
+details.sc summary .more{font-size:13px;color:var(--red);font-weight:700;margin-top:2px}
+details.sc[open] summary .more::after{content:"Less"}
+details.sc:not([open]) summary .more::after{content:"How it works"}
+details.sc .body{padding:0 18px 16px;border-top:1px solid var(--rule);margin:0 0 0}
+details.sc .body p{padding-top:12px;font-size:15px;margin:0}
+details.sc summary:focus-visible{outline:3px solid var(--orange);outline-offset:2px;border-radius:14px}
+.verdict{margin-bottom:0;align-self:flex-start}
+.gone-card{border-color:#F0B3B7}
+@media (prefers-reduced-motion:no-preference){details.sc .body p{animation:show .18s ease-out}}
+@keyframes show{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -81,88 +127,203 @@ footer .legal{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap
 
   <section id="how">
     <h2>How it works</h2>
-    <div class="diagram">
-      <b>1.</b> When you set up your vault, your phone generates a random 256-bit <b>vault key</b>. This key encrypts and decrypts everything. It is created on the phone and never leaves it unencrypted.<br>
-      <b>2.</b> You choose a <b>passphrase</b>. The phone turns it into a wrapping key using scrypt, a deliberately slow function (about a second of work) so that guessing passphrases is expensive. The vault key is locked inside that wrapping key.<br>
-      <b>3.</b> The phone also generates a <b>12-word recovery phrase</b> (a standard BIP-39 phrase, the same kind used for crypto wallets). The vault key is locked a second time inside a key made from those words.<br>
-      <b>4.</b> The two locked copies of the vault key, plus the encrypted vault, go to the server. The passphrase and the twelve words do not; they exist only in your head and wherever you wrote them.<br>
-      <b>5.</b> On your phone, the unlocked vault key is kept in the phone's hardware keystore, behind your screen lock and, if you turn it on, the fingerprint lock. That is why you do not type the passphrase every day.
-    </div>
-    <p>Everything you enter (places, holdings, balances, quantities, purchase dates and costs, debts, pensions) and every daily history point is inside the encrypted vault. The cipher is XChaCha20-Poly1305, which is authenticated: if a single byte of the file is altered, decryption fails rather than producing wrong numbers.</p>
-    <p>Your daily history is written by your phone, not the server. When you open the app it looks at the days since your last point and computes each one from your holdings and that day's market close. This is exact, because holdings cannot change while the app is closed, and it means the server never needs to see your numbers to keep your chart complete.</p>
+    <figure class="fig">
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="figt figd" xmlns="http://www.w3.org/2000/svg">
+        <title id="figt">Your phone holds the keys; the server holds a scrambled file.</title>
+        <desc id="figd">On the phone: a vault key, locked twice, once by your passphrase and once by twelve words. Only the scrambled vault and the two locked copies travel to the server. The passphrase, the words and the unlocked key never leave.</desc>
+        <defs>
+          <linearGradient id="skyg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#1E0E24"/><stop offset=".45" stop-color="#5A1430"/><stop offset=".8" stop-color="#C1272D"/><stop offset="1" stop-color="#E8702A"/>
+          </linearGradient>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#C1272D"/></marker>
+        </defs>
+        <!-- PHONE -->
+        <rect x="18" y="18" width="270" height="264" rx="20" fill="#F7F6F4" stroke="#E3E0DA"/>
+        <text x="153" y="46" text-anchor="middle" font-family="Bricolage Grotesque,ui-sans-serif,sans-serif" font-weight="800" font-size="15" fill="#0D0D0D">Your phone</text>
+        <!-- vault key -->
+        <g transform="translate(48,70)">
+          <rect width="210" height="46" rx="12" fill="#FFFFFF" stroke="#E3E0DA"/>
+          <circle cx="24" cy="23" r="9" fill="none" stroke="#E8702A" stroke-width="4"/><rect x="31" y="21" width="30" height="4" fill="#E8702A"/><rect x="50" y="25" width="4" height="7" fill="#E8702A"/><rect x="58" y="25" width="4" height="9" fill="#E8702A"/>
+          <text x="78" y="20" font-family="Bricolage Grotesque,ui-sans-serif,sans-serif" font-weight="800" font-size="13" fill="#0D0D0D">Vault key</text>
+          <text x="78" y="36" font-family="Bricolage Grotesque,ui-sans-serif,sans-serif" font-weight="500" font-size="11.5" fill="#4A4A4A">random, made here, never sent</text>
+        </g>
+        <!-- two locks -->
+        <g transform="translate(48,130)">
+          <rect width="99" height="60" rx="12" fill="#FFFFFF" stroke="#E3E0DA"/>
+          <rect x="12" y="24" width="16" height="13" rx="3" fill="#C1272D"/><path d="M14.5 24v-4a5.5 5.5 0 0 1 11 0v4" fill="none" stroke="#C1272D" stroke-width="3"/>
+          <text x="36" y="27" font-family="Bricolage Grotesque,ui-sans-serif,sans-serif" font-weight="800" font-size="11.5" fill="#0D0D0D">Passphrase</text>
+          <text x="36" y="42" font-family="Bricolage Grotesque,ui-sans-serif,sans-serif" font-weight="500" font-size="10.5" fill="#4A4A4A">locks a copy</text>
+        </g>
+        <g transform="translate(159,130)">
+          <rect width="99" height="60" rx="12" fill="#FFFFFF" stroke="#E3E0DA"/>
+          <rect x="12" y="24" width="16" height="13" rx="3" fill="#C1272D"/><path d="M14.5 24v-4a5.5 5.5 0 0 1 11 0v4" fill="none" stroke="#C1272D" stroke-width="3"/>
+          <text x="36" y="27" font-family="Bricolage Grotesque,ui-sans-serif,sans-serif" font-weight="800" font-size="11.5" fill="#0D0D0D">12 words</text>
+          <text x="36" y="42" font-family="Bricolage Grotesque,ui-sans-serif,sans-serif" font-weight="500" font-size="10.5" fill="#4A4A4A">lock another</text>
+        </g>
+        <!-- numbers -->
+        <g transform="translate(48,204)">
+          <rect width="210" height="60" rx="12" fill="#FFFFFF" stroke="#E3E0DA"/>
+          <text x="14" y="24" font-family="Bricolage Grotesque,ui-sans-serif,sans-serif" font-weight="800" font-size="12" fill="#0D0D0D">Your numbers, readable here</text>
+          <text x="14" y="42" font-family="Bricolage Grotesque,ui-sans-serif,sans-serif" font-weight="500" font-size="11.5" fill="#4A4A4A">€ 412,300 · 14.2 oz · Mortgage −€188k</text>
+        </g>
+        <!-- ARROWS -->
+        <path d="M300 118 H452" stroke="#C1272D" stroke-width="3" marker-end="url(#arr)"/>
+        <text x="376" y="108" text-anchor="middle" font-family="Bricolage Grotesque,ui-sans-serif,sans-serif" font-weight="800" font-size="12" fill="#C1272D">encrypted vault</text>
+        <path d="M300 172 H452" stroke="#C1272D" stroke-width="3" marker-end="url(#arr)"/>
+        <text x="376" y="162" text-anchor="middle" font-family="Bricolage Grotesque,ui-sans-serif,sans-serif" font-weight="800" font-size="12" fill="#C1272D">two locked key copies</text>
+        <!-- never crosses -->
+        <circle cx="376" cy="210" r="11" fill="none" stroke="#9A9A9A" stroke-width="2.5"/><line x1="368.5" y1="202.5" x2="383.5" y2="217.5" stroke="#9A9A9A" stroke-width="2.5"/>
+        <text x="376" y="240" text-anchor="middle" font-family="Bricolage Grotesque,ui-sans-serif,sans-serif" font-weight="700" font-size="11" fill="#4A4A4A">
+          <tspan x="376" dy="0">passphrase, words</tspan>
+          <tspan x="376" dy="15">and the open key</tspan>
+          <tspan x="376" dy="15">never cross</tspan>
+        </text>
+        <!-- SERVER -->
+        <rect x="472" y="18" width="270" height="264" rx="20" fill="url(#skyg)"/>
+        <text x="607" y="46" text-anchor="middle" font-family="Bricolage Grotesque,ui-sans-serif,sans-serif" font-weight="800" font-size="15" fill="#FFFFFF">Our server</text>
+        <g transform="translate(502,70)">
+          <rect width="210" height="76" rx="12" fill="#FFFFFF" fill-opacity=".12" stroke="#FFFFFF" stroke-opacity=".35"/>
+          <text x="14" y="24" font-family="Bricolage Grotesque,ui-sans-serif,sans-serif" font-weight="800" font-size="12" fill="#FFFFFF">One scrambled file</text>
+          <text x="14" y="44" font-family="ui-monospace,Menlo,monospace" font-size="11" fill="#F7E4C4">9f3a c01e 77b2 e8d4 0a5c</text>
+          <text x="14" y="60" font-family="ui-monospace,Menlo,monospace" font-size="11" fill="#F7E4C4">b61d 2f90 aa17 4c3e …</text>
+        </g>
+        <g transform="translate(502,160)">
+          <rect width="99" height="46" rx="12" fill="#FFFFFF" fill-opacity=".12" stroke="#FFFFFF" stroke-opacity=".35"/>
+          <rect x="12" y="20" width="16" height="13" rx="3" fill="#F6C46B"/><path d="M14.5 20v-4a5.5 5.5 0 0 1 11 0v4" fill="none" stroke="#F6C46B" stroke-width="3"/>
+          <text x="36" y="31" font-family="Bricolage Grotesque,ui-sans-serif,sans-serif" font-weight="700" font-size="11.5" fill="#FFFFFF">locked key</text>
+        </g>
+        <g transform="translate(613,160)">
+          <rect width="99" height="46" rx="12" fill="#FFFFFF" fill-opacity=".12" stroke="#FFFFFF" stroke-opacity=".35"/>
+          <rect x="12" y="20" width="16" height="13" rx="3" fill="#F6C46B"/><path d="M14.5 20v-4a5.5 5.5 0 0 1 11 0v4" fill="none" stroke="#F6C46B" stroke-width="3"/>
+          <text x="36" y="31" font-family="Bricolage Grotesque,ui-sans-serif,sans-serif" font-weight="700" font-size="11.5" fill="#FFFFFF">locked key</text>
+        </g>
+        <g transform="translate(502,220)">
+          <rect width="210" height="44" rx="12" fill="#FFFFFF" fill-opacity=".12" stroke="#FFFFFF" stroke-opacity=".35"/>
+          <text x="14" y="19" font-family="Bricolage Grotesque,ui-sans-serif,sans-serif" font-weight="800" font-size="12" fill="#FFFFFF">Cannot be opened here</text>
+          <text x="14" y="35" font-family="Bricolage Grotesque,ui-sans-serif,sans-serif" font-weight="500" font-size="11.5" fill="#F7E4C4">not by us, a thief, or a court</text>
+        </g>
+      </svg>
+      <figcaption>Two ends: your phone, and your phone. The server in the middle stores what it cannot read.</figcaption>
+    </figure>
+
+    <ol class="steps">
+      <li><b>A key is made</b> Setting up the vault creates a random 256-bit key on your phone. It encrypts everything and never leaves unencrypted.</li>
+      <li><b>You choose a passphrase</b> It becomes a wrapping key through scrypt, a deliberately slow function, so guessing is expensive. The vault key is locked inside it.</li>
+      <li><b>Twelve words are drawn</b> A standard recovery phrase locks a second copy of the vault key. Write them down; they are your way back in.</li>
+      <li><b>Only sealed things travel</b> The encrypted vault and the two locked key copies go to the server. Your passphrase and words do not.</li>
+      <li><b>Your phone keeps the open key</b> In the hardware keystore, behind your screen lock and, if you turn it on, the fingerprint lock. So you do not type the passphrase daily.</li>
+    </ol>
+    <p class="muted" style="margin-top:18px">The cipher is XChaCha20-Poly1305. It is authenticated: change one byte of the file and decryption fails instead of showing wrong numbers. Your daily history is written by the phone too, from your holdings and each day's market close, so the server never needs your numbers to keep the chart complete.</p>
   </section>
 
   <section id="leaves">
-    <h2>What leaves your phone, and what does not</h2>
-    <dl>
-      <dt>Goes to the server, encrypted, unreadable by us</dt>
-      <dd>The vault: everything you own and owe, and your history.</dd>
-      <dt>Goes to the server, readable, because an account needs it</dt>
-      <dd>Your email address, a hashed login password, whether two-factor authentication is on, and the two locked copies of your vault key. None of these reveal a single number.</dd>
-      <dt>Goes to our price service, readable, because it is public data</dt>
-      <dd>The ticker symbols you look up (say, VWCE or BTC), so it can fetch prices. Not how many you hold, not what you paid. A symbol alone says nothing about your finances.</dd>
-      <dt>Stays on your phone only</dt>
-      <dd>Which categories you hide on Home, and whether the fingerprint lock is on. Everything personal — your birth year, the retirement figures, the projection settings — lives inside the encrypted vault with the rest, so it follows you to a new phone and we cannot read it.</dd>
-      <dt>Never exists anywhere</dt>
-      <dd>Bank logins, card numbers, IBANs, transactions. The app never connects to a bank or broker.</dd>
-    </dl>
+    <h2>What goes where</h2>
+    <div class="lanes">
+      <div class="lane stay">
+        <h3>Stays on your phone</h3>
+        <p class="who">Nobody else, ever</p>
+        <div class="chips"><span class="chip">Passphrase</span><span class="chip">12 words</span><span class="chip">Unlocked key</span><span class="chip">Hidden categories</span><span class="chip">Fingerprint lock on/off</span></div>
+      </div>
+      <div class="lane sealed">
+        <h3>Goes to the server, sealed</h3>
+        <p class="who">Stored, unreadable to us</p>
+        <div class="chips"><span class="chip">Places &amp; holdings</span><span class="chip">Balances</span><span class="chip">Debts</span><span class="chip">Pensions</span><span class="chip">History</span><span class="chip">Birth year</span><span class="chip">Retirement &amp; projection settings</span></div>
+      </div>
+      <div class="lane open">
+        <h3>Goes readable, because it must</h3>
+        <p class="who">An account needs it; prices are public</p>
+        <div class="chips"><span class="chip">Email address</span><span class="chip">Hashed login password</span><span class="chip">2FA on/off</span><span class="chip">Ticker symbols you look up</span></div>
+        <p class="never">A symbol alone (VWCE, BTC) says nothing about how much you hold or paid.</p>
+      </div>
+    </div>
+    <p class="muted"><s>Bank logins, card numbers, IBANs, transactions</s> — never exist anywhere. The app does not connect to a bank or broker.</p>
   </section>
 
   <section id="scenarios">
     <h2>What happens when…</h2>
-
-    <div class="scenario">
-      <span class="verdict ok">Everything comes back</span>
-      <h3>You get a new phone</h3>
-      <p>Install Sunward, sign in with your email and password (and your authenticator code if you use two-factor). The app then asks for your vault passphrase, or your twelve words, once. It downloads the encrypted vault, unlocks it on the new phone with the key it just recovered, and fills in any history days that were missed while the app was not open. Every place, holding, debt and pension is there, and so are your birth year and your projection and retirement settings. The unlocked key is then stored in the new phone's keystore, so you are not asked again. Only two things are per-phone: which categories you hide, and whether the fingerprint lock is on.</p>
-    </div>
-
-    <div class="scenario">
-      <span class="verdict ok">Everything comes back</span>
-      <h3>You use two phones, or a phone and a tablet</h3>
-      <p>Same as above: sign in and enter the passphrase once on each device. Both hold the unlocked key and both read the same encrypted vault. Changes made on one appear on the other the next time it opens.</p>
-    </div>
-
-    <div class="scenario">
-      <span class="verdict ok">Nothing lost</span>
-      <h3>You lose your phone, or it is stolen</h3>
-      <p>Whoever has the phone faces your screen lock and, if enabled, the fingerprint lock; the vault key sits behind both in hardware. Your vault is still on the server, encrypted, and the vault file is never stored on a phone: the app fetches it each time with a live login session. So on a new phone, sign in, enter the passphrase, then go to Profile → <strong>Sign out on all devices</strong>. That revokes every session, including the lost phone's; even if someone gets past its locks, the app there can no longer fetch anything to decrypt. Change your login password as well. There is nothing on the old phone that helps an attacker read the server's copy.</p>
-    </div>
-
-    <div class="scenario">
-      <span class="verdict ok">Nothing lost</span>
-      <h3>You forget your login password</h3>
-      <p>Tap "Forgot password" on the sign-in screen; a reset link arrives by email and opens the app. This is the ordinary account password, which the server knows in hashed form, so resetting it is routine. It is a different thing from the vault passphrase, and resetting it has no effect on your vault.</p>
-    </div>
-
-    <div class="scenario">
-      <span class="verdict warn">Use the twelve words</span>
-      <h3>You forget your vault passphrase</h3>
-      <p>On a phone that still holds the unlocked key, nothing changes day to day; go to Profile and set a new passphrase while you can. On a new phone, enter your twelve-word recovery phrase instead of the passphrase; it unlocks the vault the same way, and you then choose a new passphrase. The words are the backup for the passphrase, which is why the app asks you to write them down at setup and lets you check them in Profile at any time.</p>
-    </div>
-
-    <div class="scenario">
-      <span class="verdict gone">Data is gone, by design</span>
-      <h3>You forget the passphrase AND lose the twelve words</h3>
-      <p>Then the vault cannot be opened by anyone, including us. There is no reset button, because a reset button would be a back door, and a back door for you is a back door for everyone else. You can delete the unreadable vault from Profile and start again; your account and login stay. This is the one real cost of the design. Keep the words somewhere that survives a lost phone: a password manager, or paper in a drawer.</p>
-    </div>
-
-    <div class="scenario">
-      <span class="verdict ok">Nothing lost</span>
-      <h3>You uninstall the app</h3>
-      <p>Everything the app kept on the phone goes with it: the session, the cached key, the hidden-category and lock preferences. Nothing is left behind, and the app does not let Android back its private data up to Google Drive. The server is unchanged; your vault waits there, encrypted, until you reinstall or delete it. Reinstalling is exactly the new-phone scenario.</p>
-    </div>
-
-    <div class="scenario">
-      <span class="verdict ok">You choose</span>
-      <h3>You want your data out, or gone</h3>
-      <p>Profile → Export gives you everything as one file, in plain form or encrypted with a password you choose using standard AES-256; the encrypted file carries instructions to open it with OpenSSL on any computer, decades from now, with no Sunward involved. Profile → Delete all data wipes the vault and history and leaves an empty account. Profile → Delete my account removes the vault, the history and your email address. Both are immediate and permanent. Without the app, the same is available by email; see the <a href="/sunward/#delete">deletion section</a> of the privacy policy.</p>
-    </div>
-
-    <div class="scenario">
-      <span class="verdict ok">Your numbers stay unreadable</span>
-      <h3>Our server is breached, or we are ordered to hand data over</h3>
-      <p>The attacker, or the authority, receives what the server holds: email addresses, hashed passwords, and one encrypted file plus two locked key copies per person. The locked keys need your passphrase or your twelve words to open, and neither is on the server. We would tell you about a breach, and you would change your login password; your vault would not need to change, because nothing that opens it was exposed.</p>
+    <p class="muted">Tap any card for the how.</p>
+    <div class="grid">
+      <details class="sc">
+        <summary>
+          <span class="verdict ok">Everything comes back</span>
+          <h3>You get a new phone</h3>
+          <p class="one">Sign in, enter your passphrase once, and everything is back.</p>
+          <span class="more"></span>
+        </summary>
+        <div class="body"><p>Install Sunward, sign in with your email and password (and your authenticator code if you use two-factor). The app then asks for your vault passphrase, or your twelve words, once. It downloads the encrypted vault, unlocks it on the new phone with the key it just recovered, and fills in any history days that were missed while the app was not open. Every place, holding, debt and pension is there, and so are your birth year and your projection and retirement settings. The unlocked key is then stored in the new phone's keystore, so you are not asked again. Only two things are per-phone: which categories you hide, and whether the fingerprint lock is on.</p></div>
+      </details>
+      <details class="sc">
+        <summary>
+          <span class="verdict ok">Everything comes back</span>
+          <h3>You use two phones, or a phone and a tablet</h3>
+          <p class="one">Each device unlocks once; both read the same vault.</p>
+          <span class="more"></span>
+        </summary>
+        <div class="body"><p>Same as above: sign in and enter the passphrase once on each device. Both hold the unlocked key and both read the same encrypted vault. Changes made on one appear on the other the next time it opens.</p></div>
+      </details>
+      <details class="sc">
+        <summary>
+          <span class="verdict ok">Nothing lost</span>
+          <h3>You lose your phone, or it is stolen</h3>
+          <p class="one">The vault is not on the phone. Sign out everywhere from a new one.</p>
+          <span class="more"></span>
+        </summary>
+        <div class="body"><p>Whoever has the phone faces your screen lock and, if enabled, the fingerprint lock; the vault key sits behind both in hardware. Your vault is still on the server, encrypted, and the vault file is never stored on a phone: the app fetches it each time with a live login session. So on a new phone, sign in, enter the passphrase, then go to Profile → <strong>Sign out on all devices</strong>. That revokes every session, including the lost phone's; even if someone gets past its locks, the app there can no longer fetch anything to decrypt. Change your login password as well. There is nothing on the old phone that helps an attacker read the server's copy.</p></div>
+      </details>
+      <details class="sc">
+        <summary>
+          <span class="verdict ok">Nothing lost</span>
+          <h3>You forget your login password</h3>
+          <p class="one">Ordinary email reset. It does not touch the vault.</p>
+          <span class="more"></span>
+        </summary>
+        <div class="body"><p>Tap "Forgot password" on the sign-in screen; a reset link arrives by email and opens the app. This is the ordinary account password, which the server knows in hashed form, so resetting it is routine. It is a different thing from the vault passphrase, and resetting it has no effect on your vault.</p></div>
+      </details>
+      <details class="sc">
+        <summary>
+          <span class="verdict warn">Use the twelve words</span>
+          <h3>You forget your vault passphrase</h3>
+          <p class="one">Your twelve words open it; then pick a new passphrase.</p>
+          <span class="more"></span>
+        </summary>
+        <div class="body"><p>On a phone that still holds the unlocked key, nothing changes day to day; go to Profile and set a new passphrase while you can. On a new phone, enter your twelve-word recovery phrase instead of the passphrase; it unlocks the vault the same way, and you then choose a new passphrase. The words are the backup for the passphrase, which is why the app asks you to write them down at setup and lets you check them in Profile at any time.</p></div>
+      </details>
+      <details class="sc gone-card">
+        <summary>
+          <span class="verdict gone">Data is gone, by design</span>
+          <h3>You forget the passphrase AND lose the twelve words</h3>
+          <p class="one">Nobody can open it, including us. Start fresh.</p>
+          <span class="more"></span>
+        </summary>
+        <div class="body"><p>Then the vault cannot be opened by anyone, including us. There is no reset button, because a reset button would be a back door, and a back door for you is a back door for everyone else. You can delete the unreadable vault from Profile and start again; your account and login stay. This is the one real cost of the design. Keep the words somewhere that survives a lost phone: a password manager, or paper in a drawer.</p></div>
+      </details>
+      <details class="sc">
+        <summary>
+          <span class="verdict ok">Nothing lost</span>
+          <h3>You uninstall the app</h3>
+          <p class="one">The phone forgets; the server keeps your sealed vault.</p>
+          <span class="more"></span>
+        </summary>
+        <div class="body"><p>Everything the app kept on the phone goes with it: the session, the cached key, the hidden-category and lock preferences. Nothing is left behind, and the app does not let Android back its private data up to Google Drive. The server is unchanged; your vault waits there, encrypted, until you reinstall or delete it. Reinstalling is exactly the new-phone scenario.</p></div>
+      </details>
+      <details class="sc">
+        <summary>
+          <span class="verdict ok">You choose</span>
+          <h3>You want your data out, or gone</h3>
+          <p class="one">Export to a file, or delete for good. Both in Profile.</p>
+          <span class="more"></span>
+        </summary>
+        <div class="body"><p>Profile → Export gives you everything as one file, in plain form or encrypted with a password you choose using standard AES-256; the encrypted file carries instructions to open it with OpenSSL on any computer, decades from now, with no Sunward involved. Profile → Delete all data wipes the vault and history and leaves an empty account. Profile → Delete my account removes the vault, the history and your email address. Both are immediate and permanent. Without the app, the same is available by email; see the <a href="/sunward/#delete">deletion section</a> of the privacy policy.</p></div>
+      </details>
+      <details class="sc">
+        <summary>
+          <span class="verdict ok">Your numbers stay unreadable</span>
+          <h3>Our server is breached, or we are ordered to hand data over</h3>
+          <p class="one">They get scrambled files and locked keys. Nothing that opens them.</p>
+          <span class="more"></span>
+        </summary>
+        <div class="body"><p>The attacker, or the authority, receives what the server holds: email addresses, hashed passwords, and one encrypted file plus two locked key copies per person. The locked keys need your passphrase or your twelve words to open, and neither is on the server. We would tell you about a breach, and you would change your login password; your vault would not need to change, because nothing that opens it was exposed.</p></div>
+      </details>
     </div>
   </section>
 
