@@ -102,7 +102,7 @@ footer .legal{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap
       <dt>Goes to our price service, readable, because it is public data</dt>
       <dd>The ticker symbols you look up (say, VWCE or BTC), so it can fetch prices. Not how many you hold, not what you paid. A symbol alone says nothing about your finances.</dd>
       <dt>Stays on your phone only</dt>
-      <dd>Your birth year and the retirement figures you type, the projection settings, which categories you hide, and whether the fingerprint lock is on. <em>We are moving these into the encrypted vault so they follow you to a new phone; until then, they are simply re-typed there.</em></dd>
+      <dd>Which categories you hide on Home, and whether the fingerprint lock is on. Everything personal — your birth year, the retirement figures, the projection settings — lives inside the encrypted vault with the rest, so it follows you to a new phone and we cannot read it.</dd>
       <dt>Never exists anywhere</dt>
       <dd>Bank logins, card numbers, IBANs, transactions. The app never connects to a bank or broker.</dd>
     </dl>
@@ -114,7 +114,7 @@ footer .legal{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap
     <div class="scenario">
       <span class="verdict ok">Everything comes back</span>
       <h3>You get a new phone</h3>
-      <p>Install Sunward, sign in with your email and password (and your authenticator code if you use two-factor). The app then asks for your vault passphrase, or your twelve words, once. It downloads the encrypted vault, unlocks it on the new phone with the key it just recovered, and fills in any history days that were missed while the app was not open. Every place, holding, debt and pension is there. The unlocked key is then stored in the new phone's keystore, so you are not asked again. Only the on-phone settings listed above need re-typing.</p>
+      <p>Install Sunward, sign in with your email and password (and your authenticator code if you use two-factor). The app then asks for your vault passphrase, or your twelve words, once. It downloads the encrypted vault, unlocks it on the new phone with the key it just recovered, and fills in any history days that were missed while the app was not open. Every place, holding, debt and pension is there, and so are your birth year and your projection and retirement settings. The unlocked key is then stored in the new phone's keystore, so you are not asked again. Only two things are per-phone: which categories you hide, and whether the fingerprint lock is on.</p>
     </div>
 
     <div class="scenario">
@@ -150,7 +150,7 @@ footer .legal{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap
     <div class="scenario">
       <span class="verdict ok">Nothing lost</span>
       <h3>You uninstall the app</h3>
-      <p>Everything the app kept on the phone goes with it: the session, the cached key, the on-phone settings. Nothing is left behind, and the app does not let Android back its private data up to Google Drive. The server is unchanged; your vault waits there, encrypted, until you reinstall or delete it. Reinstalling is exactly the new-phone scenario.</p>
+      <p>Everything the app kept on the phone goes with it: the session, the cached key, the hidden-category and lock preferences. Nothing is left behind, and the app does not let Android back its private data up to Google Drive. The server is unchanged; your vault waits there, encrypted, until you reinstall or delete it. Reinstalling is exactly the new-phone scenario.</p>
     </div>
 
     <div class="scenario">
