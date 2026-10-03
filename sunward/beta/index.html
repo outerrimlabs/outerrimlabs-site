@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Join the Sunward beta · Outer Rim Labs</title>
+<meta name="description" content="Sunward is in closed testing on Google Play. Join the shakedown run: real app, real numbers, two weeks, a direct line to the builder.">
+<link rel="icon" href="/sunward/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/sunward/icon-180.png">
+<meta property="og:title" content="Join the Sunward beta">
+<meta property="og:description" content="Your net worth today, at 65, and after Irish taxes. Encrypted on your phone. Now in closed testing — take a seat.">
+<meta property="og:image" content="https://outerrimlabs.app/sunward/og.png">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;800&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0D0D0D;--night:#1E0E24;--wine:#5A1430;--land:#1A0A10;--red:#C1272D;--orange:#E8702A;--amber:#F6C46B;--cream:#F7E4C4;--white:#FFFFFF;--off:#F7F6F4;--grey:#4A4A4A;--grey-2:#9A9A9A;--rule:#E3E0DA;
+  --font:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--font);color:var(--black);background:var(--off);line-height:1.5;font-size:17px;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:880px;margin:0 auto;padding:0 24px}
+
+header.sky{color:var(--white);background:linear-gradient(180deg,var(--night) 0%,var(--wine) 30%,var(--red) 58%,var(--orange) 80%,#F0B27A 95%,var(--off) 100%);position:relative;overflow:hidden}
+nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0;position:relative;z-index:2}
+.studio{display:flex;align-items:center;gap:10px;color:var(--white);text-decoration:none;font-weight:800;letter-spacing:.06em;font-size:14px}
+.studio span{color:var(--amber)}
+nav a.back{color:#F1E7E3;text-decoration:none;font-size:15px}
+.hero{position:relative;z-index:2;padding:36px 0 110px;display:grid;grid-template-columns:96px 1fr;gap:28px;align-items:start}
+.hero img{width:96px;height:96px;border-radius:22px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+h1{font-weight:800;font-size:clamp(34px,5.4vw,56px);line-height:1.04;letter-spacing:-.02em;margin:0 0 10px}
+.tag{font-size:clamp(18px,2.2vw,22px);color:var(--cream);margin:0 0 22px;max-width:46ch}
+@media (max-width:640px){.hero{grid-template-columns:1fr}}
+
+main{padding:8px 0 40px}
+section{padding:36px 0;border-bottom:1px solid var(--rule)}
+section:last-of-type{border-bottom:0}
+h2{font-weight:800;font-size:28px;letter-spacing:-.01em;margin:0 0 14px}
+p{margin:0 0 14px;max-width:70ch}
+.muted{color:var(--grey)}
+
+ol.steps{list-style:none;counter-reset:s;margin:18px 0 8px;padding:0;display:grid;gap:12px}
+ol.steps li{counter-increment:s;background:var(--white);border:1px solid var(--rule);border-radius:16px;padding:18px 18px 16px 64px;position:relative}
+ol.steps li::before{content:counter(s);position:absolute;left:18px;top:16px;width:30px;height:30px;border-radius:50%;background:var(--red);color:var(--white);font-weight:800;display:grid;place-items:center;font-size:15px}
+ol.steps b{display:block;margin-bottom:4px;font-size:17px}
+ol.steps span{color:var(--grey);font-size:15px;line-height:1.5;display:block;max-width:62ch}
+ol.steps a{color:var(--red);font-weight:700;text-decoration:none}
+
+.cta{display:inline-flex;align-items:center;gap:10px;background:var(--black);color:var(--white);text-decoration:none;font-weight:800;padding:14px 20px;border-radius:10px;font-size:16px;margin:6px 14px 6px 0}
+.cta.ghost{background:var(--white);color:var(--black);border:1px solid var(--rule)}
+
+.ask{background:#FBF1D6;border:1px solid var(--amber);border-radius:16px;padding:18px 20px;margin:18px 0 0}
+.ask b{font-size:17px}
+.ask p{margin:6px 0 0;font-size:15px;color:var(--grey)}
+
+footer{background:var(--land);color:#CFCCC6;padding:36px 0 30px;font-size:14px}
+footer a{color:var(--white)}
+footer .legal{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--grey-2);margin-top:18px}
+</style>
+</head>
+<body>
+
+<header class="sky">
+  <div class="wrap">
+    <nav>
+      <a class="studio" href="/">OUTER RIM <span>LABS</span></a>
+      <a class="back" href="/sunward/">← Sunward</a>
+    </nav>
+    <div class="hero">
+      <img src="/sunward/icon-180.png" alt="Sunward icon: two suns on a horizon" width="96" height="96">
+      <div>
+        <h1>The shakedown run.</h1>
+        <p class="tag">Sunward is in closed testing on Google Play. A handful of seats, two weeks, your real numbers — and a direct line to the person who builds it.</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="what">
+    <h2>What this is</h2>
+    <p>Sunward puts everything you own and owe into one number — bank balances, shares, crypto, your home, your pension, your mortgage — with Irish taxes built in and <a href="/sunward/encryption/">everything encrypted on your phone</a>. It works; I run my own money on it. But before a new studio may launch publicly, Google asks for proof: at least 12 testers, opted in for 14 days straight. Fair enough. You'd be the proof.</p>
+    <p class="muted">It is a beta: expect the odd rough edge. Your data is never the rough edge — it's encrypted with a key only you hold, and you can export everything, or delete everything, at any time.</p>
+  </section>
+
+  <section id="join">
+    <h2>How to join</h2>
+    <ol class="steps">
+      <li><b>Tell me the email your Google Play account uses</b>
+        <span>Send it to <a href="mailto:hello@outerrimlabs.app?subject=Sunward%20beta">hello@outerrimlabs.app</a> with the subject "Sunward beta". That address goes on the testers list and nowhere else.</span></li>
+      <li><b>Wait for the "you're in" reply</b>
+        <span>Usually the same day. Google needs you on the list before the next step works.</span></li>
+      <li><b>Open the tester page on your Android phone and tap "Become a tester"</b>
+        <span>Then install Sunward from the Play Store like any other app. Updates arrive by themselves.</span></li>
+    </ol>
+    <a class="cta" href="https://play.google.com/apps/testing/com.outerrimlabs.redthree">I'm on the list — open the tester page</a>
+    <div class="ask">
+      <b>The one ask: stay aboard for the full two weeks.</b>
+      <p>Google counts testers continuously — if the crew drops below 12, the clock restarts for everyone. Keep the app installed and stay opted in until the run ends. You don't have to use it daily (though the fixes come faster when you do).</p>
+    </div>
+  </section>
+
+  <section id="why">
+    <h2>What's in it for you</h2>
+    <p>Everything unlocked, nothing to pay during the beta. New builds land on your phone within minutes of shipping. And your gripes genuinely steer the thing — most of this month's fixes started as two testers' screenshots. When Sunward charges for the forward-looking features later, the first crew will not be forgotten.</p>
+    <p>Found something broken? <a href="mailto:hello@outerrimlabs.app?subject=Sunward%20beta%20feedback">hello@outerrimlabs.app</a> — a screenshot is worth a thousand bug reports.</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>An Outer Rim Labs app. Built on the frontier, in Ireland. <a href="/">outerrimlabs.app</a> · <a href="mailto:hello@outerrimlabs.app">hello@outerrimlabs.app</a></p>
+    <div class="legal">
+      <span>© 2026 Outer Rim Labs. Nothing here is financial or tax advice.</span>
+      <span>Not affiliated with Lucasfilm or Disney.</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
