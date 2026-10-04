@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Open in Sunward · Outer Rim Labs</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/sunward/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/sunward/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;800&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0D0D0D;--night:#1E0E24;--wine:#5A1430;--red:#C1272D;--orange:#E8702A;--amber:#F6C46B;--cream:#F7E4C4;--white:#FFFFFF;--off:#F7F6F4;--grey:#4A4A4A;--grey-2:#9A9A9A;--rule:#E3E0DA;
+  --font:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font);color:var(--black);background:var(--off);line-height:1.5;font-size:17px;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+header.sky{color:var(--white);background:linear-gradient(180deg,var(--night) 0%,var(--wine) 38%,var(--red) 70%,var(--orange) 92%,#F0B27A 100%);padding:22px 24px 30px}
+.studio{display:flex;align-items:center;gap:10px;color:var(--white);text-decoration:none;font-weight:800;letter-spacing:.06em;font-size:14px}
+.studio span{color:var(--amber)}
+main{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}
+.card{background:var(--white);border:1px solid var(--rule);border-radius:16px;max-width:460px;width:100%;padding:32px 28px;text-align:center}
+.card img{width:72px;height:72px;border-radius:16px;margin-bottom:18px}
+h1{font-weight:800;font-size:28px;letter-spacing:-.01em;margin:0 0 10px;line-height:1.1}
+p{margin:0 0 14px;color:var(--grey)}
+.btn{display:inline-block;background:var(--black);color:var(--white);text-decoration:none;font-weight:700;font-size:17px;padding:15px 26px;border-radius:12px;margin:10px 0 4px}
+.hint{font-size:14px;color:var(--grey-2);margin-top:14px}
+footer{padding:20px 24px;text-align:center;font-size:13px;color:var(--grey-2)}
+</style>
+</head>
+<body>
+<header class="sky"><a class="studio" href="/">OUTER RIM <span>LABS</span></a></header>
+<main>
+  <div class="card">
+    <img src="/sunward/icon-180.png" alt="Sunward">
+    <h1 id="title">One tap left.</h1>
+    <p id="lead">This link finishes inside the app, on your phone.</p>
+    <a class="btn" id="open" href="#" style="display:none">Open Sunward</a>
+    <p class="hint" id="hint"></p>
+  </div>
+</main>
+<footer>An Outer Rim Labs starfighter. Not affiliated with Lucasfilm or Disney.</footer>
+<script>
+(function(){
+  var q = new URLSearchParams(location.search);
+  var tokenHash = q.get('token_hash');
+  var type = q.get('type') || 'email';
+  var errorDesc = q.get('error_description');
+  var title = document.getElementById('title');
+  var lead = document.getElementById('lead');
+  var open = document.getElementById('open');
+  var hint = document.getElementById('hint');
+  var isPhone = /iPhone|iPad|Android/i.test(navigator.userAgent);
+
+  if (errorDesc) {
+    title.textContent = 'That link was already used.';
+    lead.textContent = 'Open Sunward and sign in as normal. If it asks you to confirm your email again, request a fresh link from the sign-in screen.';
+    return;
+  }
+  if (!tokenHash) {
+    title.textContent = 'Nothing to open here.';
+    lead.textContent = 'This page only works from the links in Sunward’s emails. If you got here from one, the address may have been cut short — try the button in the email again.';
+    return;
+  }
+
+  var path = type === 'recovery' ? 'auth/reset' : 'auth/confirm';
+  var appUrl = 'sunward://' + path + '?token_hash=' + encodeURIComponent(tokenHash) + '&type=' + encodeURIComponent(type);
+  if (type === 'recovery') {
+    title.textContent = 'Set your new password.';
+    lead.textContent = 'One tap and Sunward opens on the new-password screen.';
+  }
+  open.href = appUrl;
+  open.style.display = 'inline-block';
+  hint.textContent = isPhone
+    ? 'Nothing happens? Make sure Sunward is installed on this phone.'
+    : 'On a computer? No harm done — open the same email on your phone and tap again. The link is still valid.';
+})();
+</script>
+</body>
+</html>
